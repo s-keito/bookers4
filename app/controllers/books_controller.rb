@@ -20,11 +20,13 @@ class BooksController < ApplicationController
 
   def index
     @books = Book.all
-    @book = Book.new
+    @book_new = Book.new
+    # @book = Book.find(params[:book_id])
   end
 
   def show
     @book = Book.find(params[:id])
+    @postcomment = Postcomment.new
   end
 
 
