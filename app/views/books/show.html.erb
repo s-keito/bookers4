@@ -21,7 +21,6 @@
           </td>
           <td><%= link_to @book.title, @book %></td>
           <td><%= @book.body %></td>
-
           <td>
           <% if @book.favorited_by?(current_user) %>
             <p>
@@ -39,30 +38,35 @@
             </p>
           <% end %>
           </td>
-
-          <td>
-             <p>コメント件数：<%= @book.postcomments.count %></p>
-             <% @book.postcomments.each do |postcomment| %>
-             <div>
-             <%= image_tag postcomment.user.get_profile_image, size:'40x40' %>
-             <%= postcomment.user.name %>
-             <%= postcomment.created_at.strftime('%Y/%m/%d') %>
-             <p><%= postcomment.comment %></p>
-             </div>
-            <% end %>
-            <div>
-              <%= form_with model: [@book, @postcomment] do |f| %>
-               <%= f.text_area :comment, rows: '5', placeholder: "コメント" %>
-               <%= f.submit "送信" %>
-              <% end %>
-            </div>
-          </td>
+             <td><p>コメント件数：<%= @book.postcomments.count %></p></td>
             <% if @book.user == current_user %>
             <td><%= link_to 'Edit', edit_book_path(@book), class: "btn btn-sm btn-success" %></td>
             <td><%= link_to 'Destroy', @book, method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger"%></td>
             <% end %>
         </tr>
       </table>
+
+           <div>
+            <% @book.postcomments.each do |postcomment| %>
+             <%= image_tag postcomment.user.get_profile_image, size:'40x40' %>
+             <%= postcomment.user.name %>
+             <%= postcomment.created_at.strftime('%Y/%m/%d') %>
+             <%= postcomment.comment %>
+             <br>
+             <% if postcomment.user == current_user %>
+             <%= link_to "削除", book_postcomment_path(postcomment.book, postcomment), method: :delete %>
+             <% end %>
+             <br>
+            <% end %>
+           </div>
+
+
+            <div>
+            <%= form_with model: [@book, Postcomment.new] do |f| %>
+            <%= f.text_area :comment, placeholder: "コメント" %>
+            <%= f.submit "送信" %>
+            <% end %>
+           </div>
     </div>
   </div>
 </div>

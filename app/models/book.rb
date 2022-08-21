@@ -1,5 +1,5 @@
 class Book < ApplicationRecord
-  belongs_to :user, dependent: :destroy
+  belongs_to :user
   has_many :favorites, dependent: :destroy
   has_many :postcomments, dependent: :destroy
 
